@@ -1,7 +1,5 @@
 package graphics.windows;
 
-import game.controller.GameController;
-import game.gameObject.GameObject;
 import graphics.gui.GuiManager;
 import game.controller.WindowController;
 import org.newdawn.slick.GameContainer;
@@ -31,14 +29,13 @@ public abstract class Window extends BasicGameState implements Observer {
     public abstract void enter(GameContainer container, StateBasedGame game) throws SlickException;
 
     public void init(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
-        System.out.println("init window");
         controller.init();
         guiManager.init(this);
         this.stateBasedGame = stateBasedGame;
     }
 
-    public void update(GameContainer gameContainer, StateBasedGame stateBasedGame, int i) throws SlickException {
-        controller.update(gameContainer);
+    public void update(GameContainer gameContainer, StateBasedGame stateBasedGame, int delta) throws SlickException {
+        controller.update(gameContainer, delta);
         guiManager.update();
     }
 

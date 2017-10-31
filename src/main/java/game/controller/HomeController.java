@@ -9,13 +9,19 @@ public class HomeController extends WindowController {
     public void init() {
 
     }
+
+    @Override
+    public void enter() {
+
+    }
+
     @Override
     public void render(GameContainer container, Graphics graphics) {
 
     }
 
     @Override
-    public void update(GameContainer container) {
+    public void update(GameContainer container, int delta) {
 
     }
     @Override
@@ -25,6 +31,14 @@ public class HomeController extends WindowController {
     @Override
     public void keyReleased(int key, char c) {
 
+    }
+    @Override
+    public float CameraFocusX() {
+        return 0;
+    }
+    @Override
+    public float CameraFocusY() {
+        return 0;
     }
 
 }

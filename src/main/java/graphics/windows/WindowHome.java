@@ -2,6 +2,7 @@ package graphics.windows;
 
 import game.controller.GameController;
 import game.controller.HomeController;
+import graphics.animation.AnimationFactory;
 import graphics.gui.GuiGameManager;
 import graphics.gui.GuiHomeManager;
 import javafx.util.Pair;
@@ -23,15 +24,20 @@ public class WindowHome extends Window {
         this.controller = new HomeController();
         this.guiManager = new GuiHomeManager();
     }
+
     @Override
     public void enter(GameContainer container, StateBasedGame game) throws SlickException {
+        System.out.println("enter home");
+        this.controller.enter();
     }
 
     @Override
     public void init(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
+        System.out.println("init home");
         super.init(gameContainer, stateBasedGame);
         this.container = gameContainer;
         this.background = new Image("background/home.jpg");
+        AnimationFactory.getInstance().init();
     }
 
     @Override
@@ -56,6 +62,13 @@ public class WindowHome extends Window {
     public void keyReleased(int key, char c) {
         if (Input.KEY_ESCAPE == key) {
             this.container.exit();
+        }
+    }
+
+    @Override
+    public void keyPressed(int key, char c){
+        if (Input.KEY_ENTER == key){
+            this.stateBasedGame.enterState(1);
         }
     }
 }

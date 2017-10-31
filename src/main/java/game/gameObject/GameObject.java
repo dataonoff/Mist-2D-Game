@@ -1,17 +1,20 @@
 package game.gameObject;
 
+import graphics.animation.ObjectAnimation;
 import org.newdawn.slick.Animation;
+import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 
 public abstract class GameObject {
 
     protected float x;
     protected float y;
+    protected boolean moving = false;
 
-    protected Animation animation;
+    protected ObjectAnimation objectAnimation;
 
-    protected GameObject(Animation animation, float x, float y) {
-        this.animation = animation;
+    protected GameObject(ObjectAnimation animation, float x, float y) {
+        this.objectAnimation = animation;
         this.x = x;
         this.y = y;
     }
@@ -21,6 +24,33 @@ public abstract class GameObject {
     }
 
     public void draw(Graphics graphics) {
-        graphics.drawAnimation(animation, x, y);
+    }
+
+    public void update(int delta){
+
+    }
+
+    public float getX() {
+        return x;
+    }
+
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public void setY(float y) {
+        this.y = y;
+    }
+
+    public boolean isMoving() {
+        return moving;
+    }
+
+    public void setMoving(boolean moving) {
+        this.moving = moving;
     }
 }

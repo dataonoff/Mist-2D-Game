@@ -1,8 +1,6 @@
 package graphics.windows;
 
 import game.controller.GameController;
-import game.gameObject.PlayerAnimation;
-import game.gameObject.player.Player;
 import graphics.gui.GuiGameManager;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.StateBasedGame;
@@ -14,33 +12,40 @@ public class WindowGame extends Window {
 
     private TiledMap map;
     private GameContainer container;
+    private GameController gameController = new GameController();
+    //private Camera camera;
 
     public WindowGame() {
         super(1);
-        this.controller = new GameController();
+        this.controller = gameController;
         this.guiManager = new GuiGameManager();
     }
     @Override
     public void enter(GameContainer container, StateBasedGame game) throws SlickException {
         System.out.println("enter game");
+        this.controller.enter();
 
     }
     @Override
     public void init(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
+        System.out.println("init game");
         super.init(gameContainer, stateBasedGame);
+        //this.camera = new Camera();
         this.container = gameContainer;
         this.map = new TiledMap("map/walk.tmx");
     }
 
     @Override
     public void render(GameContainer gameContainer, StateBasedGame stateBasedGame, Graphics graphics) throws SlickException {
+    graphics.translate(gameContainer.getWidth() / 2 - (int) gameController.CameraFocusX(), gameContainer.getHeight() / 2
+                - (int) gameController.CameraFocusY());
     this.map.render(0, -950);
     super.render(gameContainer, stateBasedGame, graphics);
     }
 
     @Override
-    public void update(GameContainer gameContainer, StateBasedGame stateBasedGame, int i) throws SlickException {
-        this.controller.update(gameContainer);
+    public void update(GameContainer gameContainer, StateBasedGame stateBasedGame, int delta) throws SlickException {
+        this.controller.update(gameContainer, delta);
     }
 
 
@@ -60,4 +65,5 @@ public class WindowGame extends Window {
     public void update(Observable o, Object arg) {
 
     }
+
 }

@@ -18,10 +18,8 @@ public abstract class GuiManager {
     protected abstract void createGui(Window window);
 
     public void init(Window window){
-        System.out.println("init Gui");
         this.elements = new ArrayList<GuiElement>();
         this.createGui(window);
-        System.out.println("rend init: " + elements);
     }
 
     public void render(Graphics graphics){

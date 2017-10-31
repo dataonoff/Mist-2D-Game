@@ -12,6 +12,7 @@ public class GuiHomeManager extends GuiManager {
 
     }
     protected void createGui(Window window) {
+        System.out.println("createGuiHome");
         Button new_gamebutton = new Button(new Rectangle(350, 200, 100, 40), Color.black, "New Game");
         new_gamebutton.addObserver(window);
         this.elements.add(new_gamebutton);
