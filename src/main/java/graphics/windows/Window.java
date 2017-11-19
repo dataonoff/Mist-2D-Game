@@ -52,7 +52,6 @@ public abstract class Window extends BasicGameState implements Observer {
     @Override
     public void keyReleased(int key, char c){
         controller.keyReleased(key,c);
-        System.out.println("keyreleasedwindow enter");
     }
 
     @Override

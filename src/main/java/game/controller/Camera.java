@@ -1,50 +1,68 @@
 package game.controller;
 
 import game.gameObject.player.Player;
+import graphics.map.EMap;
+import graphics.map.MapFactory;
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.tiled.TiledMap;
 
 public class Camera {
 
-    private float x;
-    private float y;
+    private float xCamera;
+    private float yCamera;
+    private TiledMap Map1 = MapFactory.getMapFactory().getMaps(EMap.MAP1);
 
     public Camera() {
-this.x = 0;
-this.y = 0;
+        this.xCamera = 0;
+        this.yCamera = 0;
     }
 
     public void update(GameContainer container, Player player){
         int w = container.getWidth() / 4;
         float x = player.getX();
         float y = player.getY();
-        //System.out.println("position player: " + this.x);
-        //System.out.println("position camera: " + (this.camera.getX() + w));
-        if (x > this.x + w) {
-            this.x = (x - w);
-        } else if (x < this.x - w) {
-            this.x = (x + w);
+        if (x > this.xCamera + w) {
+            this.xCamera = (x - w);
+        } else if (x < this.xCamera - w) {
+            this.xCamera = (x + w);
         }
         int h = container.getHeight() / 4;
-        if (y > this.y + h) {
-            this.y = (y - h);
-        } else if (y < this.y - h) {
-            this.y = (y + h);
+        if (y > this.yCamera + h) {
+            this.yCamera = (y - h);
+        } else if (y < this.yCamera - h) {
+            this.yCamera = (y + h);
+        }
+
+        //camera Map Limit
+        int min = container.getWidth() / 2;
+        int max = Map1.getWidth() * Map1.getTileWidth() -  container.getWidth() / 2;
+        if (this.xCamera < min) {
+            this.xCamera = min;
+        } else if (this.xCamera > max) {
+            this.xCamera = max;
+        }
+        min = container.getHeight() / 2;
+        max = this.Map1.getHeight() * this.Map1.getTileHeight() - container.getHeight() / 2;
+        if (this.yCamera < min) {
+            this.yCamera = min;
+        } else if (this.yCamera > max) {
+            this.yCamera = max;
         }
     }
 
     public float getX() {
-        return x;
+        return xCamera;
     }
 
     public void setX(float x) {
-        this.x = x;
+        this.xCamera = x;
     }
 
     public float getY() {
-        return y;
+        return yCamera;
     }
 
     public void setY(float y) {
-        this.y = y;
+        this.yCamera = y;
     }
 }

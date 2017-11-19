@@ -1,5 +1,6 @@
 package game.gameObject;
 
+import game.gameObject.player.Actions;
 import graphics.animation.ObjectAnimation;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
@@ -9,9 +10,9 @@ public abstract class GameObject {
 
     protected float x;
     protected float y;
-    protected boolean moving = false;
-
     protected ObjectAnimation objectAnimation;
+    private boolean moving = false;
+    private Actions actions;
 
     protected GameObject(ObjectAnimation animation, float x, float y) {
         this.objectAnimation = animation;
@@ -30,6 +31,14 @@ public abstract class GameObject {
 
     }
 
+    public float nextX(int delta){
+        return x;
+    }
+
+    public float nextY(int delta){
+        return y;
+    }
+
     public float getX() {
         return x;
     }
@@ -46,11 +55,4 @@ public abstract class GameObject {
         this.y = y;
     }
 
-    public boolean isMoving() {
-        return moving;
-    }
-
-    public void setMoving(boolean moving) {
-        this.moving = moving;
-    }
 }

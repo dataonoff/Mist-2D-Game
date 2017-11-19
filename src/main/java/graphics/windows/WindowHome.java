@@ -1,12 +1,10 @@
 package graphics.windows;
 
-import game.controller.GameController;
 import game.controller.HomeController;
 import graphics.animation.AnimationFactory;
-import graphics.gui.GuiGameManager;
 import graphics.gui.GuiHomeManager;
+import graphics.map.MapFactory;
 import javafx.util.Pair;
-import org.lwjgl.Sys;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -38,6 +36,7 @@ public class WindowHome extends Window {
         this.container = gameContainer;
         this.background = new Image("background/home.jpg");
         AnimationFactory.getInstance().init();
+        MapFactory.getMapFactory().init();
     }
 
     @Override
