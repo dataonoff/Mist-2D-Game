@@ -1,6 +1,7 @@
 package graphics.windows;
 
 import game.controller.HomeController;
+import game.gameObject.GameObjectManager;
 import graphics.animation.AnimationFactory;
 import graphics.gui.GuiHomeManager;
 import graphics.map.MapFactory;
@@ -8,6 +9,7 @@ import javafx.util.Pair;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.StateBasedGame;
 
+import java.io.IOException;
 import java.util.Observable;
 
 public class WindowHome extends Window {
@@ -35,8 +37,13 @@ public class WindowHome extends Window {
         super.init(gameContainer, stateBasedGame);
         this.container = gameContainer;
         this.background = new Image("background/home.jpg");
-        AnimationFactory.getInstance().init();
+        try {
+            AnimationFactory.getInstance().init();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         MapFactory.getMapFactory().init();
+        GameObjectManager.getInstance().init();
     }
 
     @Override

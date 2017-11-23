@@ -21,17 +21,17 @@ public class MapTileAnimation {
     public MapTileAnimation() {
     }
 
-    public void update(){
-        lift1();
-        lift2();
-        lift3();
-        lift4();
-        lift5();
+    public void update(int delta){
+        lift1(delta);
+        lift2(delta);
+        lift3(delta);
+        lift4(delta);
+        lift5(delta);
     }
 
-    public void lift1(){
+    public void lift1(int delta){
         countLift1++;
-        if(countLift1 == 4){
+        if(countLift1 >= (4 * 20/delta)){
             countLift1 = 0;
             if((map.getTileId(9, lift1Y, 2) == 218) && (lift1Y > 34)) {
                 map.setTileId(9, lift1Y, 2, 206);
@@ -61,9 +61,9 @@ public class MapTileAnimation {
         }
     }
 
-    public void lift2(){
+    public void lift2(int delta){
         countLift2++;
-        if(countLift2 == 4){
+        if(countLift2 >= (4 * 20/delta)){
             countLift2 = 0;
             if((map.getTileId(12, lift2Y, 2) == 218) && (lift2Y > 4)) {
                 map.setTileId(12, lift2Y, 2, 206);
@@ -93,9 +93,9 @@ public class MapTileAnimation {
         }
     }
 
-    public void lift3(){
+    public void lift3(int delta){
         countLift3++;
-        if(countLift3 == 4){
+        if(countLift3 >= (4 * 20/delta)){
             countLift3 = 0;
             if((map.getTileId(22, lift3Y, 2) == 218) && (lift3Y > 4)) {
                 map.setTileId(22, lift3Y, 2, 206);
@@ -125,9 +125,9 @@ public class MapTileAnimation {
         }
     }
 
-    public void lift4(){
+    public void lift4(int delta){
         countLift4++;
-        if(countLift4 == 4){
+        if(countLift4 >= (4 * 20/delta)){
             countLift4 = 0;
             if((map.getTileId(34, lift4Y, 2) == 218) && (lift4Y > 12)) {
                 map.setTileId(34, lift4Y, 2, 206);
@@ -157,9 +157,9 @@ public class MapTileAnimation {
         }
     }
 
-    public void lift5(){
+    public void lift5(int delta){
         countLift5++;
-        if(countLift5 == 4){
+        if(countLift5 >= (4 * 20/delta)){
             countLift5 = 0;
             if((map.getTileId(41, lift5Y, 2) == 218) && (lift5Y > 27)) {
                 map.setTileId(41, lift5Y, 2, 206);

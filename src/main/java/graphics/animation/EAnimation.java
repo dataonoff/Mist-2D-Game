@@ -6,8 +6,5 @@ public enum EAnimation {
     JUMP,
     SHOOT,
     FALL,
-    CLIMB_UP,
-    CLIMB_DOWN,
-    FLY,
     ATTACK,
 }

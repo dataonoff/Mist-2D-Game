@@ -1,11 +1,8 @@
 package game.controller;
 
-import game.backGroundObject.BackgroundObjectManager;
-import game.backGroundObject.Bird;
-import game.backGroundObject.Cloud;
+import game.backGroundObject.backgroundObjectManager.BackgroundObjectManager;
+import game.gameObject.GameObjectManager;
 import game.gameObject.EGameObject;
-import game.gameObject.GameObject;
-import game.gameObject.monster.Raccoon;
 import graphics.animation.AnimationFactory;
 import game.gameObject.player.Player;
 import org.newdawn.slick.*;
@@ -13,11 +10,12 @@ import org.newdawn.slick.*;
 public class GameController extends WindowController {
     private Player player;
     private Camera camera;
-    private Bird bird;
     private BackgroundObjectManager backgroundObjectManager;
-    private Raccoon raccoon;
+    private GameObjectManager gameObjects;
+
     @Override
     public void init() {
+
     }
 
     @Override
@@ -25,21 +23,27 @@ public class GameController extends WindowController {
         try {
             this.player = new Player(AnimationFactory.getInstance().getObjectAnimation(EGameObject.KEVIN), 300-32, 1300-64);
             this.camera = new Camera();
-            this.bird = new Bird(AnimationFactory.getInstance().getObjectAnimation(EGameObject.BIRD),300,300);
+            this.gameObjects = new GameObjectManager();
+            this.gameObjects.init();
             this.backgroundObjectManager = new BackgroundObjectManager();
             this.backgroundObjectManager.init();
-            this.raccoon = new Raccoon(AnimationFactory.getInstance().getObjectAnimation(EGameObject.RACCOON),300,1300);
-
+            Music background = null;
+            try {
+                background = new Music("music/Dew.wav");
+            } catch (SlickException e) {
+                e.printStackTrace();
+            }
+            background.loop();
         } catch (SlickException e) {
             e.printStackTrace();
         }
+
     }
 
     @Override
     public void render(GameContainer gameContainer, Graphics graphics) {
         player.draw(graphics);
-        bird.draw(graphics);
-        raccoon.draw(graphics);
+        this.gameObjects.draw(graphics);
         backgroundObjectManager.draw(graphics);
     }
 
@@ -47,8 +51,7 @@ public class GameController extends WindowController {
     public void update(GameContainer container, int delta) {
             player.update(delta);
             camera.update(container, this.player);
-            bird.update(delta);
-            raccoon.update(delta);
+            this.gameObjects.update(delta);
             backgroundObjectManager.update(container,delta);
     }
 
@@ -85,10 +88,10 @@ public class GameController extends WindowController {
                 this.player.walkLeft();
                 break;
             case Input.KEY_UP:
-                this.player.climUp();
+                this.player.liftUp();
                 break;
             case Input.KEY_DOWN:
-                this.player.climDown();
+                this.player.liftDown();
                 break;
             case Input.KEY_SPACE:
                 this.player.jump();

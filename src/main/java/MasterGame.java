@@ -9,6 +9,7 @@ public class MasterGame {
 
     public void start() throws SlickException {
         AppGameContainer app = new AppGameContainer(new StateGame(), 800, 600, true);
+        app.setTargetFrameRate(50);
         app.setShowFPS(false);
         app.start();
 

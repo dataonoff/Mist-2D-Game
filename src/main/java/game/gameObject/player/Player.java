@@ -2,12 +2,18 @@ package game.gameObject.player;
 
 import game.collision.BorderCollision;
 import game.collision.FloorCollision;
+import game.collision.GateCollider;
 import game.collision.ScaleCollision;
+import game.gameObject.EGameObject;
 import game.gameObject.GameObject;
+import game.gameObject.GameObjectManager;
 import game.gravity.Gravity;
 import graphics.animation.EAnimation;
 import graphics.animation.ObjectAnimation;
+import graphics.map.EMap;
+import graphics.map.MapFactory;
 import org.newdawn.slick.*;
+import org.newdawn.slick.tiled.TiledMap;
 
 public class Player extends GameObject {
 
@@ -17,16 +23,20 @@ public class Player extends GameObject {
     private BorderCollision borderCollision = new BorderCollision();
     private ScaleCollision scaleCollision = new ScaleCollision();
     private FloorCollision floorCollision = new FloorCollision();
+    private GateCollider gateCollider = new GateCollider();
     private Gravity gravity = new Gravity();
     private boolean goingRight = false;
     private boolean goingLeft = false;
-    private boolean climbingUp = false;
-    private boolean climbingDown = false;
+    private boolean liftingUp = false;
+    private boolean liftingDown = false;
+    private int dobleJump = 0;
+    private TiledMap map = MapFactory.getMapFactory().getMaps(EMap.MAP1);
 
     public Player(ObjectAnimation animation, float x, float y) throws SlickException {
         super(animation, x, y);
         this.x = x;
         this.y = y;
+        this.actions = Actions.IDLE;
     }
 
     public void init() {
@@ -52,58 +62,83 @@ public class Player extends GameObject {
         this.y = y;
     }
 
+    @Override
     public void draw(Graphics graphics) {
         graphics.setColor(new Color(0, 0, 0, .5f));
         graphics.fillOval(x - 16, y - 8, 32, 16);
         this.objectAnimation.getCurrentAnimation().getCurrentFrame().getFlippedCopy(!this.objectAnimation.isLookRight(), false).draw(x - 32, y - 64);
+        this.gateCollider.draw(graphics);
     }
 
-
+    @Override
     public void update(int delta) {
         this.objectAnimation.getCurrentAnimation().update(delta);
 
+        for (int objectID = 0; objectID < map.getObjectCount(0); objectID++) {
+            if (x > map.getObjectX(0, objectID)
+                    && x < map.getObjectX(0, objectID) + map.getObjectWidth(0, objectID)
+                    && y > map.getObjectY(0, objectID)
+                    && y < map.getObjectY(0, objectID) + map.getObjectHeight(0, objectID)) {
+                if ("teleport".equals(map.getObjectType(0, objectID))) {
+                    x = Float.parseFloat(map.getObjectProperty(0, objectID, "dest-x", Float.toString(x)));
+                    y = Float.parseFloat(map.getObjectProperty(0, objectID, "dest-y", Float.toString(y)));
+                }
+            }
+        }
+
+
+
         // manage X
         boolean borderCollisions = borderCollision.getCollision(this.nextX(delta), this.nextY(delta));
+        boolean floorDetected = floorCollision.getCollision(this.nextX(delta), this.nextY(delta));
         if (borderCollisions) {
             this.moving = false;
         } else {
             this.x = nextX(delta);
         }
 
+
         // manage gravity
         boolean scaleDetected = scaleCollision.getCollision(this.x, this.y);
-        if (!scaleDetected) {
+        if (!scaleDetected || this.actions == Actions.SIMPLE_JUMP) {
             this.gravity.setGravityOn(true);
-        } else if (scaleDetected && (climbingUp || climbingDown)) {
+        } else if ((liftingUp || liftingDown)) {
+
             this.gravity.setGravityOn(false);
+        }
+
+        //Stop GravityOFF at the end of the scale
+        if(liftingUp && !scaleDetected){
+            this.actions = Actions.IDLE;
+            this.idle();
         }
 
         // manage Y
         boolean useGravity = this.gravity.increment();
-        float futurY = this.nextY(delta) + gravity.getGravity() * delta;
+        float futurY = this.nextY(delta) + gravity.getGravity() * delta / 20;
         boolean floorCollisions = floorCollision.getCollision(this.nextX(delta), futurY);
-        if (!floorCollisions){
+        if (!floorCollisions) {
             this.y = futurY;
         }
         else {
             this.gravity.init();
         }
 
+        //manage dobleJump
+        if(floorCollisions && dobleJump == 2){
+            dobleJump = 0;
+        }
+
         // manage JUMP
+        // avoid jump when falling
+        if(!floorCollisions && dobleJump == 0){
+            dobleJump = 2;
+        }
+        //avoid endless bouncing
         if (floorCollisions) {
-            if (this.actions == Actions.LIFT_DOWN) {
-                this.moving = false;
-            }
-            if (this.actions == Actions.SIMPLE_JUMP || this.actions == Actions.JUMP_RIGHT || this.actions == Actions.JUMP_LEFT) {
-                this.actions = Actions.IDLE;
-                if (!goingRight && !goingLeft) {
-                    this.idle();
-                }
-                if (this.goingRight) {
-                    this.walkRight();
-                } else if (this.goingLeft) {
-                    this.walkLeft();
-                }
+        if (this.actions == Actions.SIMPLE_JUMP || this.actions == Actions.JUMP_RIGHT || this.actions == Actions.JUMP_LEFT || this.actions == Actions.LIFT_UP || this.actions == Actions.LIFT_DOWN) {
+            this.actions = Actions.IDLE;
+            this.idle();
             }
         }
 
@@ -146,10 +181,10 @@ public class Player extends GameObject {
                     y -= .6f * delta;
                     break;
                 case LIFT_UP:
-                    y -= .2f * delta;
+                    y -= .6f * delta;
                     break;
                 case LIFT_DOWN:
-                    y += .2f * delta;
+                    y += .6f * delta;
                     break;
             }
         }
@@ -158,60 +193,80 @@ public class Player extends GameObject {
 
     public void walkRight() {
         this.objectAnimation.setCurrent(EAnimation.MOVE_WALK);
-        this.setActions(Actions.WALK_RIGHT);
-        this.moving = true;
-        this.goingLeft = false;
-        this.goingRight = true;
-
+            this.setActions(Actions.WALK_RIGHT);
+            this.moving = true;
+            this.goingLeft = false;
+            this.goingRight = true;
+            this.liftingUp = false;
+            this.liftingDown = true;
     }
 
 
     public void walkLeft() {
-        this.objectAnimation.setCurrent(EAnimation.MOVE_WALK);
-        this.setActions(Actions.WALK_LEFT);
-        this.moving = true;
-        this.goingRight = false;
-        this.goingLeft = true;
+            this.objectAnimation.setCurrent(EAnimation.MOVE_WALK);
+            this.setActions(Actions.WALK_LEFT);
+            this.moving = true;
+            this.goingRight = false;
+            this.goingLeft = true;
+            this.liftingUp = false;
+            this.liftingDown = true;
     }
 
-    public void climUp() {
-        this.climbingUp = true;
-        this.climbingDown = false;
-        this.objectAnimation.setCurrent(EAnimation.MOVE_WALK);
-        this.setActions(Actions.LIFT_UP);
-        this.moving = true;
+    public void liftUp() {
+        boolean scaleDetector = scaleCollision.getCollision(this.x, this.y);
+        if(!scaleDetector){
+            this.moving = false;
+            this.liftingUp = false;
+        }
+        else {
+            this.objectAnimation.setCurrent(EAnimation.IDLE);
+            this.liftingUp = true;
+            this.liftingDown = false;
+            this.setActions(Actions.LIFT_UP);
+            this.moving = true;
+        }
     }
 
-    public void climDown() {
-        this.climbingDown = true;
-        this.climbingUp = false;
-        this.objectAnimation.setCurrent(EAnimation.MOVE_WALK);
-        this.setActions(Actions.LIFT_DOWN);
-        this.moving = true;
+    public void liftDown() {
+        boolean scaleDetector = scaleCollision.getCollision(this.x, this.y);
+        if(!scaleDetector){
+            this.moving = false;
+            this.liftingDown = false;
+        }
+        else{
+            this.liftingDown = true;
+            this.liftingUp = false;
+            this.objectAnimation.setCurrent(EAnimation.IDLE);
+            this.setActions(Actions.LIFT_DOWN);
+            this.moving = true;
+        }
     }
 
     public void jump() {
-        if (!this.goingLeft && !this.goingRight) {
-            this.objectAnimation.setCurrent(EAnimation.IDLE);
-            this.setActions(Actions.SIMPLE_JUMP);
-            this.moving = true;
-        } else if (goingRight) {
-            this.objectAnimation.setCurrent(EAnimation.IDLE);
-            this.setActions(Actions.JUMP_RIGHT);
-            this.moving = true;
-        } else {
-            this.objectAnimation.setCurrent(EAnimation.IDLE);
-            this.setActions(Actions.JUMP_LEFT);
-            this.moving = true;
-        }
-        this.gravity.init();
 
+        if (dobleJump < 2){
+            dobleJump++;
+            if (!this.goingLeft && !this.goingRight) {
+                this.objectAnimation.setCurrent(EAnimation.IDLE);
+                this.setActions(Actions.SIMPLE_JUMP);
+                this.moving = true;
+            } else if (goingRight) {
+                this.liftingDown = false;
+                this.objectAnimation.setCurrent(EAnimation.IDLE);
+                this.setActions(Actions.JUMP_RIGHT);
+                this.moving = true;
+            } else {
+                this.liftingDown = false;
+                this.objectAnimation.setCurrent(EAnimation.IDLE);
+                this.setActions(Actions.JUMP_LEFT);
+                this.moving = true;
+            }
+            this.gravity.init();
+        }
     }
 
     public void idle() {
-        if (this.actions != Actions.SIMPLE_JUMP && this.actions != Actions.JUMP_RIGHT && this.actions != Actions.JUMP_LEFT) {
-            //System.out.println("goingright: "+ goingRight);
-            //System.out.println("goingleft: "+ goingLeft);
+        if (this.actions != Actions.SIMPLE_JUMP && this.actions != Actions.JUMP_RIGHT && this.actions != Actions.JUMP_LEFT && this.actions !=Actions.LIFT_UP && this.actions != Actions.LIFT_DOWN) {
             if (goingRight && !goingLeft) {
                 this.walkRight();
             } else if (goingLeft && !goingRight) {
@@ -231,7 +286,12 @@ public class Player extends GameObject {
 
     public void setActions(Actions actions) {
         this.actions = actions;
-        this.objectAnimation.setLookRight(this.actions == Actions.WALK_RIGHT);
+        if(actions == Actions.WALK_RIGHT || actions == Actions.JUMP_RIGHT){
+            this.objectAnimation.setLookRight(true);
+        }
+        if(actions == Actions.WALK_LEFT || actions == Actions.JUMP_LEFT){
+            this.objectAnimation.setLookRight(false);
+        }
     }
 
     public void setGoingRight(boolean goingRight) {

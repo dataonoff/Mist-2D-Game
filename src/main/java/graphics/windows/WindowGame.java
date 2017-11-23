@@ -17,6 +17,7 @@ public class WindowGame extends Window {
     private GameContainer container;
     private GameController gameController = new GameController();
     private MapTileAnimation mapTileAnimation;
+    private int deltaFreq = 0;
 
 
     public WindowGame() {
@@ -53,8 +54,14 @@ public class WindowGame extends Window {
 
     @Override
     public void update(GameContainer gameContainer, StateBasedGame stateBasedGame, int delta) throws SlickException {
-        this.controller.update(gameContainer, delta);
-        this.mapTileAnimation.update();
+        this.deltaFreq += delta;
+        //System.out.println(deltaFreq + " !!!!!  " + delta);
+        //if(deltaFreq >= 20) {
+            this.controller.update(gameContainer, delta);
+            deltaFreq = 0;
+        //}
+        this.mapTileAnimation.update(delta);
+
     }
 
 

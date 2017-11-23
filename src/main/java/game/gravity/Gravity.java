@@ -18,7 +18,7 @@ public class Gravity {
             init();
             return false;
         } else {
-            gravity += .01f;
+            gravity += .8f;
             return true;
         }
     }

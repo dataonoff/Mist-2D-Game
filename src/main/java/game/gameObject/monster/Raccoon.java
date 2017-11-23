@@ -32,7 +32,6 @@ public class Raccoon extends GameObject {
 
     @Override
     public void update(int delta) {
-        this.objectAnimation.setCurrent(EAnimation.MOVE_WALK);
         this.objectAnimation.getCurrentAnimation().update(delta);
 
         //manage Y
@@ -42,7 +41,7 @@ public class Raccoon extends GameObject {
             this.actions = Actions.FALLING;
         }
 
-        float futurY = this.nextY(delta) + gravity.getGravity() * delta;
+        float futurY = this.nextY(delta) + gravity.getGravity();
         boolean floorDetected = floorCollision.getCollision(nextX(delta),futurY);
         if (!floorDetected)
             this.y = futurY;
