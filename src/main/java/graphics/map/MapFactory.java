@@ -9,7 +9,6 @@ public class MapFactory{
 
     private static MapFactory mapFactory = new MapFactory();
     private HashMap<EMap,TiledMap> maps;
-    private TiledMap level1;
 
     public MapFactory() {
         this.maps = new HashMap<EMap, TiledMap>();
@@ -25,7 +24,9 @@ public class MapFactory{
 
     private void addMaps() throws SlickException {
         TiledMap map1 = new TiledMap("map/walk.tmx");
+        TiledMap map2 = new TiledMap("map/desert.tmx");
         this.maps.put(EMap.MAP1,map1);
+        this.maps.put(EMap.MAP2, map2);
     }
 
     public TiledMap getMaps(EMap eMap){

@@ -6,6 +6,7 @@ import game.gameObject.player.Actions;
 import game.gravity.Gravity;
 import graphics.animation.EAnimation;
 import graphics.animation.ObjectAnimation;
+import org.lwjgl.Sys;
 import org.newdawn.slick.Graphics;
 
 public class Raccoon extends GameObject {

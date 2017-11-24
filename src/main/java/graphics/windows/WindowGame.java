@@ -36,8 +36,6 @@ public class WindowGame extends Window {
         System.out.println("init game");
         super.init(gameContainer, stateBasedGame);
         this.container = gameContainer;
-        //this.map = new TiledMap("map/walk.tmx");
-        this.map = MapFactory.getMapFactory().getMaps(EMap.MAP1);
         this.mapTileAnimation = new MapTileAnimation();
     }
 
@@ -45,9 +43,6 @@ public class WindowGame extends Window {
     public void render(GameContainer gameContainer, StateBasedGame stateBasedGame, Graphics graphics) throws SlickException {
     graphics.translate(gameContainer.getWidth() / 2 - (int) gameController.CameraFocusX(), gameContainer.getHeight() / 2
                 - (int) gameController.CameraFocusY());
-    int w = this.map.getWidth();
-    this.map.render(0, 0);
-
     super.render(gameContainer, stateBasedGame, graphics);
     }
 

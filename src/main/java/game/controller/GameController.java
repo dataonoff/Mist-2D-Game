@@ -5,13 +5,18 @@ import game.gameObject.GameObjectManager;
 import game.gameObject.EGameObject;
 import graphics.animation.AnimationFactory;
 import game.gameObject.player.Player;
+import graphics.map.EMap;
+import graphics.map.MapFactory;
+import music.SoundManager;
+import org.lwjgl.Sys;
 import org.newdawn.slick.*;
+import org.newdawn.slick.tiled.TiledMap;
 
 public class GameController extends WindowController {
     private Player player;
     private Camera camera;
     private BackgroundObjectManager backgroundObjectManager;
-    private GameObjectManager gameObjects;
+    private EMap eMap = EMap.MAP1;
 
     @Override
     public void init() {
@@ -21,10 +26,11 @@ public class GameController extends WindowController {
     @Override
     public void enter() {
         try {
+
             this.player = new Player(AnimationFactory.getInstance().getObjectAnimation(EGameObject.KEVIN), 300-32, 1300-64);
             this.camera = new Camera();
-            this.gameObjects = new GameObjectManager();
-            this.gameObjects.init();
+            GameObjectManager.getInstance().init();
+            SoundManager.getInstance().init();
             this.backgroundObjectManager = new BackgroundObjectManager();
             this.backgroundObjectManager.init();
             Music background = null;
@@ -42,16 +48,23 @@ public class GameController extends WindowController {
 
     @Override
     public void render(GameContainer gameContainer, Graphics graphics) {
+        changeMap(eMap).render(0,0);
         player.draw(graphics);
-        this.gameObjects.draw(graphics);
+        GameObjectManager.getInstance().draw(graphics);
         backgroundObjectManager.draw(graphics);
+    }
+
+    private TiledMap changeMap(EMap eMap){
+        return MapFactory.getMapFactory().getMaps(eMap);
+
     }
 
     @Override
     public void update(GameContainer container, int delta) {
             player.update(delta);
+            this.eMap = player.getNewMap();
             camera.update(container, this.player);
-            this.gameObjects.update(delta);
+            GameObjectManager.getInstance().update(delta);
             backgroundObjectManager.update(container,delta);
     }
 

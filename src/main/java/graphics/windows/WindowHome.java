@@ -43,7 +43,6 @@ public class WindowHome extends Window {
             e.printStackTrace();
         }
         MapFactory.getMapFactory().init();
-        GameObjectManager.getInstance().init();
     }
 
     @Override

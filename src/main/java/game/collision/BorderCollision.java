@@ -1,6 +1,5 @@
 package game.collision;
 
-import game.gameObject.GameObject;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
 

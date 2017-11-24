@@ -2,7 +2,6 @@ package game.gameObject.player;
 
 import game.collision.BorderCollision;
 import game.collision.FloorCollision;
-import game.collision.GateCollider;
 import game.collision.ScaleCollision;
 import game.gameObject.EGameObject;
 import game.gameObject.GameObject;
@@ -12,6 +11,8 @@ import graphics.animation.EAnimation;
 import graphics.animation.ObjectAnimation;
 import graphics.map.EMap;
 import graphics.map.MapFactory;
+import music.ESound;
+import music.SoundManager;
 import org.newdawn.slick.*;
 import org.newdawn.slick.tiled.TiledMap;
 
@@ -23,7 +24,6 @@ public class Player extends GameObject {
     private BorderCollision borderCollision = new BorderCollision();
     private ScaleCollision scaleCollision = new ScaleCollision();
     private FloorCollision floorCollision = new FloorCollision();
-    private GateCollider gateCollider = new GateCollider();
     private Gravity gravity = new Gravity();
     private boolean goingRight = false;
     private boolean goingLeft = false;
@@ -31,6 +31,8 @@ public class Player extends GameObject {
     private boolean liftingDown = false;
     private int dobleJump = 0;
     private TiledMap map = MapFactory.getMapFactory().getMaps(EMap.MAP1);
+    private EMap newMap = EMap.MAP1;
+
 
     public Player(ObjectAnimation animation, float x, float y) throws SlickException {
         super(animation, x, y);
@@ -67,26 +69,30 @@ public class Player extends GameObject {
         graphics.setColor(new Color(0, 0, 0, .5f));
         graphics.fillOval(x - 16, y - 8, 32, 16);
         this.objectAnimation.getCurrentAnimation().getCurrentFrame().getFlippedCopy(!this.objectAnimation.isLookRight(), false).draw(x - 32, y - 64);
-        this.gateCollider.draw(graphics);
     }
 
     @Override
     public void update(int delta) {
         this.objectAnimation.getCurrentAnimation().update(delta);
 
-        for (int objectID = 0; objectID < map.getObjectCount(0); objectID++) {
-            if (x > map.getObjectX(0, objectID)
-                    && x < map.getObjectX(0, objectID) + map.getObjectWidth(0, objectID)
-                    && y > map.getObjectY(0, objectID)
-                    && y < map.getObjectY(0, objectID) + map.getObjectHeight(0, objectID)) {
-                if ("teleport".equals(map.getObjectType(0, objectID))) {
-                    x = Float.parseFloat(map.getObjectProperty(0, objectID, "dest-x", Float.toString(x)));
-                    y = Float.parseFloat(map.getObjectProperty(0, objectID, "dest-y", Float.toString(y)));
-                }
+
+        //Gate
+        boolean gate = GameObjectManager.getInstance().getGameObjectsHashMap().get(EGameObject.GATE).GetCollision(x,y);
+        if(gate){
+            this.newMap = EMap.MAP2;
+            System.out.println(newMap);
+            SoundManager.getInstance().getSoundHashMap().get(ESound.TELEPORT).play();
+            x = 100;
+            //y = 1400;
+            y = 128;
+            /*
+            try {
+                this.map = new TiledMap("map/desert.tmx");
+            } catch (SlickException e) {
+                e.printStackTrace();
             }
+            */
         }
-
-
 
         // manage X
         boolean borderCollisions = borderCollision.getCollision(this.nextX(delta), this.nextY(delta));
@@ -300,5 +306,9 @@ public class Player extends GameObject {
 
     public void setGoingLeft(boolean goingLeft) {
         this.goingLeft = goingLeft;
+    }
+
+    public EMap getNewMap() {
+        return newMap;
     }
 }
