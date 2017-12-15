@@ -7,14 +7,17 @@ import game.gameObject.EGameObject;
 import game.gameObject.GameObject;
 import game.gameObject.GameObjectManager;
 import game.gravity.Gravity;
+import game.universe.worldmanager.EWorld;
 import graphics.animation.EAnimation;
 import graphics.animation.ObjectAnimation;
 import graphics.map.EMap;
 import graphics.map.MapFactory;
+import javafx.util.Pair;
 import music.ESound;
 import music.SoundManager;
 import org.newdawn.slick.*;
 import org.newdawn.slick.tiled.TiledMap;
+
 
 public class Player extends GameObject {
 
@@ -30,8 +33,7 @@ public class Player extends GameObject {
     private boolean liftingUp = false;
     private boolean liftingDown = false;
     private int dobleJump = 0;
-    private TiledMap map = MapFactory.getMapFactory().getMaps(EMap.MAP1);
-    private EMap newMap = EMap.MAP1;
+     private EMap newMap = EMap.MAP1;
 
 
     public Player(ObjectAnimation animation, float x, float y) throws SlickException {
@@ -79,12 +81,12 @@ public class Player extends GameObject {
         //Gate
         boolean gate = GameObjectManager.getInstance().getGameObjectsHashMap().get(EGameObject.GATE).GetCollision(x,y);
         if(gate){
-            this.newMap = EMap.MAP2;
-            System.out.println(newMap);
             SoundManager.getInstance().getSoundHashMap().get(ESound.TELEPORT).play();
-            x = 100;
-            //y = 1400;
-            y = 128;
+            this.setChanged();
+            this.notifyObservers(new Pair<String, EWorld>("redirect", EWorld.BLACK_WORLD));
+
+            //x = 100;
+            //y = 128;
             /*
             try {
                 this.map = new TiledMap("map/desert.tmx");

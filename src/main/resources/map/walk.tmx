@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="32" tileheight="32" nextobjectid="16">
+ <tileset firstgid="1" name="greengrass" tilewidth="32" tileheight="32" tilecount="112" columns="14">
+  <image source="tuiles/greengrass.png" trans="ff00ff" width="448" height="272"/>
+ </tileset>
+ <tileset firstgid="113" name="echelle" tilewidth="32" tileheight="32" tilecount="108" columns="12">
+  <image source="tuiles/mountains.png" trans="ff00ff" width="384" height="288"/>
+ </tileset>
+ <tileset firstgid="221" name="sky" tilewidth="32" tileheight="32" tilecount="15" columns="3">
+  <image source="tuiles/waterfall.png" trans="ff00ff" width="96" height="160"/>
+ </tileset>
+ <tileset firstgid="236" name="trunk" tilewidth="32" tileheight="32" tilecount="18" columns="6">
+  <image source="tuiles/trunk.png" trans="ff00ff" width="192" height="96"/>
+ </tileset>
+ <tileset firstgid="254" name="treetop" tilewidth="32" tileheight="32" tilecount="42" columns="6">
+  <image source="tuiles/treetop.png" trans="ff00ff" width="192" height="224"/>
+ </tileset>
+ <tileset firstgid="296" name="borders" tilewidth="32" tileheight="32" tilecount="25" columns="5">
+  <image source="tuiles/logic.png" trans="ff00ff" width="160" height="160"/>
+ </tileset>
+ <layer name="borders" width="50" height="50" visible="0">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+3QwQmAQAADQe3Gj+hD+2/NA0sQYQ9mIAVsrnVZ9sl3j51jszt0pOho0dGio0VHi44WHS06WnS06GjR0aKjRUeLjhYdLTpadLToaNHRoqNFR8vXji3ygY5XqQP+8ABw4kSRECcAAA==
+  </data>
+ </layer>
+ <layer name="sky" width="50" height="50">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+3DAQkAAAwEoeuf84Msx0DBVVNVVVVVVVVVVdXnDz91F6YQJwAA
+  </data>
+ </layer>
+ <layer name="scale" width="50" height="50">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+2YQQqAMAzA9v8H+Qif4Gu86sDBoLVxJrDbaMitW2siIneO4HtV2MHCDhZ2sPhbx5Y0N4osnx0snx0snx0snx0snx0snx0snx0s32jPz3BWvI/seHdmhdMOlvPLHdc5s/8g0X7CnGq/HSy/HSy/HSy/HSz/Kh0VuwjJ/8TeHVmPE9XYRZAQJwAA
+  </data>
+ </layer>
+ <layer name="plateforme" width="50" height="50">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+3ZMQrAIAxA0dzSyftfw7WDiqEO2r4HH5fMBjQC+IOSaHU+HicAzGT2UG/fAAAAZ9n91gRwq+y9BwCwS/1Ib/6QpFENEGakJxAnAAA=
+  </data>
+ </layer>
+ <layer name="tree" width="50" height="50">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+3PMQ6CQABE0V0pxAK5/ynVAizEhLnDhmwI7yW/nykFAAAAAAAAALi6Wku5paH2XtLmnv1jepz8x5T9zzSf/McrvdOn95BGS1rTt/eQRr+0pX/vIXCgHWG8oqAQJwAA
+  </data>
+ </layer>
+</map>

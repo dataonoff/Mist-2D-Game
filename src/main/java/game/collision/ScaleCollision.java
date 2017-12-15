@@ -1,13 +1,15 @@
 package game.collision;
 
+import graphics.map.MapFactory;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.tiled.TiledMap;
 
 public class ScaleCollision extends Collision{
 
     public ScaleCollision() {
         super();
-        this.layer = this.map.getLayerIndex("scale");
+        this.layer = MapFactory.getMapFactory().getCurrentMap().getLayerIndex("scale");
     }
 
     public boolean getCollision(float futurX, float futurY) {

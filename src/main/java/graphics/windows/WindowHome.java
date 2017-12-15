@@ -1,5 +1,6 @@
 package graphics.windows;
 
+import game.backGroundObject.entity.Mist;
 import game.controller.HomeController;
 import game.gameObject.GameObjectManager;
 import graphics.animation.AnimationFactory;
@@ -16,6 +17,8 @@ public class WindowHome extends Window {
 
     private GameContainer container;
     private Image background;
+    private Mist mist;
+    private Music fleet;
 
     public WindowHome() {
         super(0);
@@ -29,6 +32,7 @@ public class WindowHome extends Window {
     public void enter(GameContainer container, StateBasedGame game) throws SlickException {
         System.out.println("enter home");
         this.controller.enter();
+        this.fleet.play();
     }
 
     @Override
@@ -36,7 +40,13 @@ public class WindowHome extends Window {
         System.out.println("init home");
         super.init(gameContainer, stateBasedGame);
         this.container = gameContainer;
-        this.background = new Image("background/home.jpg");
+        try {
+            this.fleet = new Music("music/Fleet.wav");
+        } catch (SlickException e) {
+            e.printStackTrace();
+        }
+        this.background = new Image("background/Mist_black.png");
+        this.mist = new Mist(-500,0);
         try {
             AnimationFactory.getInstance().init();
         } catch (IOException e) {
@@ -48,16 +58,20 @@ public class WindowHome extends Window {
     @Override
     public void render(GameContainer gameContainer, StateBasedGame stateBasedGame, Graphics graphics) throws SlickException {
         background.draw(0, 0, gameContainer.getWidth(), gameContainer.getHeight());
+        mist.draw(graphics);
         super.render(gameContainer, stateBasedGame, graphics);
+    }
+
+    @Override
+    public void update(GameContainer gameContainer, StateBasedGame stateBasedGame, int delta){
+        mist.update(gameContainer,delta);
+
     }
 
     public void update(Observable o, Object arg) {
         if (arg instanceof Pair) {
             Pair<String, Integer> task = (Pair<String, Integer>) arg;
-
-            System.out.println("its a pair");
             if (task.getKey().equals("redirect")) {
-                System.out.println("change screen");
                 this.stateBasedGame.enterState(task.getValue());
             }
         }

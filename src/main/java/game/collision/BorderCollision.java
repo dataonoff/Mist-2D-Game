@@ -1,14 +1,16 @@
 package game.collision;
 
+import graphics.map.MapFactory;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.tiled.TiledMap;
 
 public class BorderCollision extends Collision {
     private int layer;
 
     public BorderCollision() {
         super();
-        this.layer = this.map.getLayerIndex("borders");
+        this.layer = MapFactory.getMapFactory().getCurrentMap().getLayerIndex("borders");
     }
 
     public boolean getCollision(float futurX, float futurY) {

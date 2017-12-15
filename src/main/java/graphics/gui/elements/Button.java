@@ -22,7 +22,7 @@ public class Button extends GuiElement {
     public void draw(Graphics graphics) {
         graphics.setColor(color);
         graphics.fill(rectangle);
-        graphics.setColor(Color.red);
+        graphics.setColor(Color.white);
         graphics.drawString(buttontext, rectangle.getX() + 10,rectangle.getY()+10);
     }
 

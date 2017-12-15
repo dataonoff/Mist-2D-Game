@@ -10,7 +10,7 @@ public class Camera {
 
     private float xCamera;
     private float yCamera;
-    private TiledMap Map1 = MapFactory.getMapFactory().getMaps(EMap.MAP1);
+    private TiledMap Map1 = MapFactory.getMapFactory().getCurrentMap();
 
     public Camera() {
         this.xCamera = 0;

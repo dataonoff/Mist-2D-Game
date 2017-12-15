@@ -17,6 +17,8 @@ public class BackgroundObjectManager {
     private HashMap<EBackgroundObject, BackgroundObject> backgroundObjectHashMap;
     private List<BackgroundObject> backgroundObjects;
 
+
+
     public void init() throws SlickException {
         Cloud cloud1 = new Cloud(300,200, "sprites/cloud.png");
         Cloud cloud2 = new Cloud(1300, 500, "sprites/cloud.png");
@@ -57,5 +59,9 @@ public class BackgroundObjectManager {
         for (BackgroundObject temp : backgroundObjects) {
             temp.update(container,delta);
         }
+    }
+
+    public List<BackgroundObject> getBackgroundObjects() {
+        return backgroundObjects;
     }
 }

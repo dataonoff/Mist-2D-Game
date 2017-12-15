@@ -5,7 +5,9 @@ import graphics.animation.ObjectAnimation;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
 
-public abstract class GameObject {
+import java.util.Observable;
+
+public abstract class GameObject extends Observable{
 
     protected float x;
     protected float y;
